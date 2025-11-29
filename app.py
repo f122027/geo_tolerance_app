@@ -336,7 +336,7 @@ def page_straightness():
         with img_col2:
             # 今送ってくれた公差域の図
             st.image(
-                "images/straightness_zone.jpg",
+               
                 caption="真直度の公差域のイメージ",
                 use_container_width=True,
             )
@@ -1181,3 +1181,4 @@ elif menu == "平面度（3D）":
     page_flatness_3d()
 elif menu == "複合幾何公差":
     page_composite_position_random()
+
