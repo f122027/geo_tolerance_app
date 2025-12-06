@@ -931,6 +931,12 @@ def page_composite_position_random():
             color="tab:blue",
         )
 
+        ax1.legend(
+        loc="upper right",
+        prop=jp_font     # ← これだけで日本語が文字化けしない
+        )
+
+
         # 下段パターンを線で結ぶ
         ax1.plot(
             np.append(lower_square[:, 0], lower_square[0, 0]),
@@ -938,6 +944,11 @@ def page_composite_position_random():
             "-",
             label="下段パターン",
             color="tab:orange",
+        )
+
+        ax1.legend(
+        loc="upper right",
+        prop=jp_font     # ← これだけで日本語が文字化けしない
         )
 
         ax1.set_aspect("equal", "box")
