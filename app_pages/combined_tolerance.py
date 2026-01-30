@@ -1,10 +1,22 @@
 import streamlit as st
 from core.image_helpers import make_annotated_image
 from core.figures import make_tolerance_figure
+import numpy as np
 
 def page_combined_tolerance():
 
     st.header("位置度・平行度・平面度の公差域と実測形状")
+
+    st.caption(
+        "同一の実測形状でも、公差の種類によって評価条件（拘束）が異なります。"
+    )
+    st.markdown(
+        "- 位置度：真の位置 20 を基準に **20±a/2** の範囲\n"
+        "- 平行度：**データム面Aに平行**な範囲（拘束あり）\n"
+        "- 平面度：**姿勢自由**の最小範囲（傾き自由）\n"
+        "\n"
+        "**拘束が強いほど必要な許容幅は大きくなりやすい**ため、一般に 位置度 ≥ 平行度 ≥ 平面度 と設定します。"
+    )
 
     # --- 図面イメージ：タイトル直下に小さく表示 ---
     IMAGE_COMBINED = "images/combined_tolerance.png"
