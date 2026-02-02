@@ -90,6 +90,28 @@ def make_straightness_gdt_image(tol_value: float) -> Image.Image:
 
     return img
 
+
+def make_roundness_gdt_image(
+    tol_value: float,
+    scale: float = 0.45,
+    font_size: int = 120,
+):
+    """
+    真円度の図面PNGに公差値を書き込んだ画像を返す
+    """
+    image_path = BASE_DIR / "images" / "roundness.png"
+
+    return _draw_tolerance_on_image(
+        image_path=str(image_path),
+        tol_value=tol_value,
+        scale=scale,
+        text_xy=(1800, 65),   # ← 公差枠の数値位置に合わせて調整
+        font_size=font_size,
+        text_format="{:.2f}",
+    )
+
+
+
 def make_flatness_gdt_image(tol_value: float, scale: float = 0.45,font_size:int=130):
     """
     平面度の図面PNGに公差値を書き込んだ画像を返す。
@@ -121,6 +143,52 @@ def make_flatness_gdt_image_2(tol_value: float, scale: float = 0.45,font_size:in
         font_size=font_size,
         text_format="{:.2f}",
     )
+
+def make_mmc_drawing_example_image(scale: float = 0.45) -> Image.Image:
+    """
+    MMCの図面指示例（静的画像）を読み込んで返す
+    """
+    image_path = BASE_DIR / "images" / "mmc_drawing_example.png"
+    img = Image.open(image_path).convert("RGBA")
+
+    if scale != 1.0:
+        w, h = img.size
+        img = img.resize((int(w * scale), int(h * scale)), Image.LANCZOS)
+
+    return img
+
+def make_true_position_drawing_example_image(scale: float = 0.45) -> Image.Image:
+    """
+    位置度の図面指示例（静的画像）を読み込んで返す
+    """
+    image_path = BASE_DIR / "images" / "位置度図面例.png"
+    img = Image.open(image_path).convert("RGBA")
+
+    if scale != 1.0:
+        w, h = img.size
+        img = img.resize(
+            (int(w * scale), int(h * scale)),
+            Image.LANCZOS
+        )
+
+    return img
+
+def make_roundness_drawing_example_image(scale: float = 0.45) -> Image.Image:
+    """
+    真円度の図面例（静的画像）を読み込んで返す
+    ※ 公差値は書き込まない（スライダーと連動させないため）
+    """
+    image_path = BASE_DIR / "images" / "roundness.png"
+    img = Image.open(image_path).convert("RGBA")
+
+    if scale != 1.0:
+        w, h = img.size
+        img = img.resize((int(w * scale), int(h * scale)), Image.LANCZOS)
+
+    return img
+
+
+
 
 def make_annotated_image(
     image_path,
