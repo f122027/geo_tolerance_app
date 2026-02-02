@@ -84,9 +84,9 @@ MMC 指示（例：真直度 φ0.3(M)）では、
         st.markdown("### 表示の強調（見た目用）")
         st.session_state.mmc_amp_mag = st.slider(
             "曲がり・公差域の見た目強調倍率",
-            1.0, 8.0,
+            1.0, 3.0,
             float(st.session_state.mmc_amp_mag),
-            1.0,
+            0.1,
             key="mmc_amp_mag_slider",
         )
 

@@ -54,8 +54,6 @@ def page_flatness_3d():
 
         # --- 右側の図（例：公差域説明図など） ---
         with col_i2:
-            # 同じ関数を使っても良いし，
-            # 別の画像用に make_flatness_gdt_image_2() を作ってもOK。
             img2 = make_flatness_gdt_image_2(
                 tol_value=tol,
                 scale=0.45,
@@ -88,15 +86,15 @@ def page_flatness_3d():
 
         # ---- 平面度の簡易評価（実寸）----
         max_dev = float(np.max(np.abs(Z_true)))
-        flatness = max_dev * 2  # 上下対称とみなして 2*max_dev
+        flatness = max_dev * 2  
 
         st.write(f"最大偏差（実寸）：{max_dev:.5f} mm")
         st.write(f"平面度（簡易）≈ 2 × 最大偏差 = {flatness:.5f} mm")
 
         if flatness <= tol:
-            st.success("✅ この面は平面度公差 **以内** です（実寸判定：合格）")
+            st.success("この面は平面度公差 **以内** です（実寸判定：合格）")
         else:
-            st.error("❌ この面は平面度公差を **超えています**（実寸判定：不合格）")
+            st.error("この面は平面度公差を **超えています**（実寸判定：不合格）")
 
         # ---- 表示用に高さを誇張 ----
         Z_vis = Z_true * scale_z
