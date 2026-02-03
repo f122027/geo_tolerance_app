@@ -132,5 +132,4 @@ def page_true_position():
         ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.17), ncol=2)
         fig.subplots_adjust(bottom=0.25)
 
-        # ★ここも重要：placeholderに描画＆clear_figureで残骸を残さない
         plot_ph.pyplot(fig, use_container_width=True, clear_figure=True)
