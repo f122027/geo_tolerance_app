@@ -2,7 +2,6 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 
-# from app_pages.home import show_gdt_callout
 from core.image_helpers import make_true_position_drawing_example_image
 
 
@@ -27,13 +26,10 @@ def page_true_position():
             """
         )
 
-       
-
     with col_img:
         st.subheader("図面例")
         img = make_true_position_drawing_example_image(scale=0.15)
-        st.image(img)  
-        
+        st.image(img)
 
     st.divider()
 
@@ -54,6 +50,9 @@ def page_true_position():
         st.caption(f"図ではズレを **{mag:.0f} 倍** に誇張表示しています")
 
     with col_plot:
+        # ★重要：描画領域（DOM）を固定する（removeChild系のフロントエラー回避）
+        plot_ph = st.empty()
+
         # 理想位置（20,20）
         x0, y0 = 20.0, 20.0
 
@@ -61,7 +60,7 @@ def page_true_position():
         xs = np.random.normal(x0, sigma, n_points)
         ys = np.random.normal(y0, sigma, n_points)
 
-        radius = tol / 2
+        radius = tol / 2.0
 
         # 合否判定（実寸）
         dist = np.sqrt((xs - x0) ** 2 + (ys - y0) ** 2)
@@ -82,6 +81,7 @@ def page_true_position():
         # データム B → Y=0（水平）
         ax.axhline(0.0, color="black", linewidth=2)
 
+        # 位置度公差域（表示誇張）
         circle = plt.Circle(
             (x0, y0),
             radius_vis,
@@ -93,13 +93,26 @@ def page_true_position():
         )
         ax.add_artist(circle)
 
-        ax.scatter(xs_vis[inside], ys_vis[inside], marker="o", color="tab:blue",
-                   label="穴の中心軸（合格・表示誇張）")
-        ax.scatter(xs_vis[outside], ys_vis[outside], marker="x", color="red",
-                   label="穴の中心軸（不合格・表示誇張）")
+        # 穴の中心軸（誇張表示）
+        ax.scatter(
+            xs_vis[inside],
+            ys_vis[inside],
+            marker="o",
+            color="tab:blue",
+            label="穴の中心軸（合格・表示誇張）",
+        )
+        ax.scatter(
+            xs_vis[outside],
+            ys_vis[outside],
+            marker="x",
+            color="red",
+            label="穴の中心軸（不合格・表示誇張）",
+        )
 
+        # 理想位置
         ax.scatter([x0], [y0], marker="+", s=130, color="black", label="理想位置")
 
+        # 表示範囲
         margin = radius_vis * 1.5
         ax.set_xlim(min(0, xs_vis.min()) - margin, max(xs_vis.max(), x0 + radius_vis) + margin)
         ax.set_ylim(min(0, ys_vis.min()) - margin, max(ys_vis.max(), y0 + radius_vis) + margin)
@@ -109,12 +122,15 @@ def page_true_position():
         ax.set_ylabel("データム A からの距離 [mm]")
         ax.grid(True)
 
+        # データム文字
         xlim = ax.get_xlim()
         ylim = ax.get_ylim()
         ax.text(0, ylim[1], "データム B", ha="left", va="top", fontsize=10)
         ax.text(xlim[1], 0, "データム A", ha="right", va="bottom", fontsize=10)
 
+        # 凡例（下側へ）
         ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.17), ncol=2)
         fig.subplots_adjust(bottom=0.25)
 
-        st.pyplot(fig, use_container_width=True)
+        # ★ここも重要：placeholderに描画＆clear_figureで残骸を残さない
+        plot_ph.pyplot(fig, use_container_width=True, clear_figure=True)
