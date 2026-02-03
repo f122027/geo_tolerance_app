@@ -4,6 +4,5 @@ matplotlib==3.8.2
 pillow==10.2.0
 fonttools==4.47.2
 plotly==5.18.0
-streamlit-autorefresh==1.0.1
 streamlit-plotly-events==0.0.6
 
