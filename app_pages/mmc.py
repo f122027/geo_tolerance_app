@@ -9,7 +9,7 @@ def page_mmc_straightness():
     st.header("最大実体公差方式（MMC）× 真直度（固定条件）")
 
     # -----------------------------
-    # 固定条件（ユーザー指定）
+    # 固定条件
     # -----------------------------
     L = 100.0                 # 長さ方向固定
     D_NOM = 5.0               # サイズ公差 5 ± 0.2
@@ -18,7 +18,7 @@ def page_mmc_straightness():
     STR_MMC = 0.3             # 幾何公差（MMCでの最大実体公差） φ0.3
 
     # -----------------------------
-    # デフォルト値（初回表示用）
+    # デフォルト値
     # -----------------------------
     if "mmc_d_actual" not in st.session_state:
         st.session_state.mmc_d_actual = float(D_MMC)
@@ -84,7 +84,7 @@ MMC 指示（例：真直度 φ0.3(M)）では、
         st.markdown("### 表示の強調（見た目用）")
         st.session_state.mmc_amp_mag = st.slider(
             "曲がり・公差域の見た目強調倍率",
-            1.0, 3.0,
+            1.0, 2.0,
             float(st.session_state.mmc_amp_mag),
             0.1,
             key="mmc_amp_mag_slider",
