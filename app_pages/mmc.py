@@ -23,7 +23,7 @@ def page_mmc_straightness():
     if "mmc_d_actual" not in st.session_state:
         st.session_state.mmc_d_actual = float(D_MMC)
     if "mmc_amp_mag" not in st.session_state:
-        st.session_state.mmc_amp_mag = 3.0
+        st.session_state.mmc_amp_mag = 1.0
 
     # =============================
     # レイアウト：左=説明/結果/入力、右=図
