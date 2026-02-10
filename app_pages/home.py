@@ -12,7 +12,7 @@ def page_home():
         左の **「メニュー」** から見たい項目を選んでください。
 
         本アプリの概要および実装内容は、GitHubのREADMEにまとめています。
-        st.markdown("▶ [GitHub（README）はこちら](https://github.com/f122027/geo_tolerance_app)")
+        st.markdown("▶ [GitHubはこちら](https://github.com/f122027/geo_tolerance_app)")
         """
     )
 
