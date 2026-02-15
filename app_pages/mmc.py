@@ -18,7 +18,7 @@ def page_mmc_straightness():
     STR_MMC = 0.3             # 幾何公差（MMCでの最大実体公差） φ0.3
 
     # -----------------------------
-    # デフォルト値
+    # デフォルト値（初回だけ）
     # -----------------------------
     if "mmc_d_actual" not in st.session_state:
         st.session_state.mmc_d_actual = float(D_MMC)
@@ -55,48 +55,44 @@ MMC 指示（例：真直度 φ0.3(M)）では、
 """
             ))
 
-        
-        d_actual = st.session_state.mmc_d_actual
-        amp_mag = st.session_state.mmc_amp_mag
-
-        # -----------------------------
-        # 計算（session_stateの現値で表示）
-        # -----------------------------
-        bonus = max(0.0, D_MMC - d_actual)
-        straight_total = STR_MMC + bonus  # 合計 真直度（φ）
-
+        # 計算結果の枠
         st.markdown("### 計算結果")
-        st.write(f"- 基準寸法: φ{D_NOM:.1f} / サイズ公差: 5±0.2（= {D_MIN:.1f}〜{D_MMC:.1f}）")
-        st.write(f"- MMC 真直度指示（固定）: φ{STR_MMC:.1f}")
-        st.write(f"- 実寸直径: **φ{d_actual:.2f}**")
-        st.write(f"- ボーナス: **φ{bonus:.2f}**（= 5.2 − 実寸）")
-        st.write(f"- 合計 真直度: **φ{straight_total:.2f}**（= 0.3 + ボーナス）")
+        calc_box = st.empty()
 
+        # 入力（スライダー
         st.markdown("### 入力")
-        st.session_state.mmc_d_actual = st.slider(
+        d_actual = st.slider(
             "実際の直径（実寸） d [mm]",
             float(D_MIN), float(D_MMC),
             float(st.session_state.mmc_d_actual),
             0.01,
-            key="mmc_d_actual_slider",
+            key="mmc_d_actual", 
         )
 
         st.markdown("### 表示の強調（見た目用）")
-        st.session_state.mmc_amp_mag = st.slider(
+        amp_mag = st.slider(
             "曲がり・公差域の見た目強調倍率",
             1.0, 2.0,
             float(st.session_state.mmc_amp_mag),
             0.1,
-            key="mmc_amp_mag_slider",
+            key="mmc_amp_mag", 
         )
 
-       
+        # 計算 calc_box の中身だけ更新
+        bonus = max(0.0, D_MMC - float(d_actual))
+        straight_total = STR_MMC + bonus  # 合計 真直度（φ）
+
+        with calc_box.container():
+            st.write(f"- 基準寸法: φ{D_NOM:.1f} / サイズ公差: 5±0.2（= {D_MIN:.1f}〜{D_MMC:.1f}）")
+            st.write(f"- MMC 真直度指示（固定）: φ{STR_MMC:.1f}")
+            st.write(f"- 実寸直径: **φ{d_actual:.2f}**")
+            st.write(f"- ボーナス: **φ{bonus:.2f}**（= 5.2 − 実寸）")
+            st.write(f"- 合計 真直度: **φ{straight_total:.2f}**（= 0.3 + ボーナス）")
 
     # -----------------------------
     # 右：図（図面例 + 公差域図 + 動的公差線図）
     # -----------------------------
     with colR:
-        # ★ 右側の計算は、最新の slider 値を使う
         d_actual = float(st.session_state.mmc_d_actual)
         amp_mag = float(st.session_state.mmc_amp_mag)
 
@@ -119,7 +115,7 @@ MMC 指示（例：真直度 φ0.3(M)）では、
         # 実寸半径（表示用）
         r_vis = d_actual / 2.0
 
-        # 条件を満たす中心線を作る
+        # 条件を満たす中心線を作る（見た目用）
         C = r_vis
         A = YMAX - 2.0 * r_vis
 
@@ -157,7 +153,7 @@ MMC 指示（例：真直度 φ0.3(M)）では、
         ax.set_xlim(0, L)
         ax.set_ylim(YMIN, YMAX)
         ax.set_xlabel("長さ方向 x")
-        ax.set_ylabel("最大実体実行サイズ(5.5)")
+        ax.set_ylabel("表示座標 y（固定範囲）")
         ax.grid(True)
 
         ax.text(
